@@ -30,15 +30,18 @@ export class CellManager {
   }
 
   setFlowerCell(cell) {
-    if (!Utils.isValidCell(cell)) return;
+    if (!Utils.isValidCell(cell)) return false;
     
-    if (this.isFlower(cell)) {
-      this.removeFlower(cell);
-    } else {
-      if (this.isSeed(cell)) this.removeSeed(cell);
-      this.addFlower(cell);
-      this.setRandomImage(cell, CONFIG.IMAGES.FLOWERS);
+    // Check if cell is already occupied by a seed or flower
+    if (this.isSeed(cell) || this.isFlower(cell)) {
+      console.log('Cannot place flower on occupied cell!');
+      return false; // Reject placement on occupied cells
     }
+    
+    // Cell is empty, place the flower
+    this.addFlower(cell);
+    this.setRandomImage(cell, CONFIG.IMAGES.FLOWERS);
+    return true; // Successfully placed flower
   }
 
   setRandomImage(cell, images) {

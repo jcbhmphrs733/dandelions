@@ -58,10 +58,14 @@ class DandelionsApp {
                 case CONFIG.MOUSE_BUTTONS.LEFT:
                     // Flower placement - check if it's dandelion's turn
                     if (this.gameStateManager.canPlaceFlower()) {
-                        this.cellManager.setFlowerCell(cell);
-                        console.log('Flower placed! Switching to wind turn.'); // DEBUG
-                        console.log(`Total flowers now: ${this.cellManager.flowerCells.size}`); // DEBUG
-                        this.gameStateManager.onFlowerPlaced();
+                        const success = this.cellManager.setFlowerCell(cell);
+                        if (success) {
+                            console.log('Flower placed! Switching to wind turn.'); // DEBUG
+                            console.log(`Total flowers now: ${this.cellManager.flowerCells.size}`); // DEBUG
+                            this.gameStateManager.onFlowerPlaced();
+                        } else {
+                            console.log('Cannot place flower on occupied cell! Try an empty cell.');
+                        }
                     } else {
                         console.log('Not dandelion\'s turn! Wait for your turn to place flowers.');
                     }
