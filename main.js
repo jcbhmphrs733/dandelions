@@ -11,6 +11,7 @@ import { CompassManager } from './modules/CompassManager.js';
 import { CONFIG } from './modules/Config.js';
 import { Utils } from './modules/Utils.js';
 import { WindManager } from './modules/WindManager.js';
+import { GameStateManager } from './modules/GameStateManager.js';
 
 class DandelionsApp {
     constructor() {
@@ -18,6 +19,7 @@ class DandelionsApp {
         this.cellManager = null;
         this.compassManager = null;
         this.windManager = null;
+        this.gameStateManager = null;
         this.initialize();
     }
 
@@ -33,6 +35,9 @@ class DandelionsApp {
 
         // Initialize wind manager
         this.windManager = new WindManager(this.cellManager);
+
+        // Initialize game state manager AFTER compass is created
+        this.gameStateManager = new GameStateManager();
 
         console.log('Dandelions application initialized');
 
@@ -51,13 +56,27 @@ class DandelionsApp {
             
             switch(button) {
                 case CONFIG.MOUSE_BUTTONS.LEFT:
-                    this.cellManager.setSeedCell(cell);
+                    // Flower placement - check if it's dandelion's turn
+                    if (this.gameStateManager.canPlaceFlower()) {
+                        this.cellManager.setFlowerCell(cell);
+                        console.log('Flower placed! Switching to wind turn.'); // DEBUG
+                        console.log(`Total flowers now: ${this.cellManager.flowerCells.size}`); // DEBUG
+                        this.gameStateManager.onFlowerPlaced();
+                    } else {
+                        console.log('Not dandelion\'s turn! Wait for your turn to place flowers.');
+                    }
                     break;
                 case CONFIG.MOUSE_BUTTONS.MIDDLE:
-                    this.cellManager.clearAll();
+                    // Clear all (only during dandelion turn to prevent cheating)
+                    if (this.gameStateManager.canPlaceFlower()) {
+                        this.cellManager.clearAll();
+                    } else {
+                        console.log('Cannot clear during wind turn!');
+                    }
                     break;
                 case CONFIG.MOUSE_BUTTONS.RIGHT:
-                    this.cellManager.setFlowerCell(cell);
+                    // Seeds can be placed anytime (for testing/manual placement)
+                    this.cellManager.setSeedCell(cell);
                     break;
             }
         });
@@ -65,11 +84,29 @@ class DandelionsApp {
         // Listen for custom events from compass cells
         document.addEventListener('compassClick', (e) => {
             const { direction } = e.detail;
-            this.handleCompassClick(direction);
+            console.log(`Compass clicked: ${direction}`); // DEBUG
+            
+            // Check if it's wind's turn and direction hasn't been used
+            if (this.gameStateManager.canUseWind() && !this.compassManager.isDirectionUsed(direction)) {
+                console.log('Wind turn confirmed, calling handleCompassClick'); // DEBUG
+                this.handleCompassClick(direction);
+                
+                // Mark direction as used AFTER the wind effect
+                this.compassManager.markDirectionUsed(direction);
+                
+                // Update game state AFTER the wind effect
+                this.gameStateManager.onWindUsed();
+            } else if (!this.gameStateManager.canUseWind()) {
+                console.log('Not wind\'s turn! Wait for dandelion player to place a flower.');
+            } else {
+                console.log('This wind direction has already been used!');
+            }
         });
     }
 
-    handleCompassClick(direction) {     
+    handleCompassClick(direction) {
+        console.log(`handleCompassClick called with: ${direction}`); // DEBUG
+        
         // Map compass directions to wind directions
         const directionMap = {
             'N': 'north',
@@ -84,7 +121,10 @@ class DandelionsApp {
         
         const windDirection = directionMap[direction];
         if (windDirection) {
+            console.log(`Calling blowWind with: ${windDirection}`); // DEBUG
             this.windManager.blowWind(windDirection);
+        } else {
+            console.log(`Unknown direction: ${direction}`);
         }
     }
 

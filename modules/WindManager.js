@@ -26,11 +26,17 @@ export class WindManager {
 
   blowWind(windDirection) {
     if (!windDirection) return;
-
+    
+    console.log(`blowWind called with: ${windDirection}`); // DEBUG
+    console.log(`Number of flowers on grid: ${this.cellManager.flowerCells.size}`); // DEBUG
+    
     const direction = this.getWindDirection(windDirection);
+    console.log(`Converted to direction object:`, direction); // DEBUG
 
     this.cellManager.flowerCells.forEach(async (cell) => {
+      console.log(`Processing flower cell:`, cell); // DEBUG
       let activePosition = this.cellManager.gridManager.getCellPosition(cell);
+      console.log(`Starting position:`, activePosition); // DEBUG
 
       while (true) {
         await new Promise((resolve) => setTimeout(resolve, 175));

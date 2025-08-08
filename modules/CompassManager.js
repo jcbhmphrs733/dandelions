@@ -81,12 +81,12 @@ export class CompassManager {
     handleCompassClick(direction) {
         // Check if this direction has already been used
         if (this.isDirectionUsed(direction)) {
+            console.log(`Direction ${direction} already used!`); // DEBUG
             return; // Don't dispatch event if already used
         }
 
-        // Mark this direction as used and update visual appearance
-        this.markDirectionUsed(direction);
-
+        console.log(`Dispatching compassClick event for direction: ${direction}`); // DEBUG
+        
         // Dispatch custom event for the main app to handle
         const event = new CustomEvent('compassClick', {
             detail: { direction }
