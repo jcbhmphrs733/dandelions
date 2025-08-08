@@ -10,7 +10,7 @@ import { CellManager } from './modules/CellManager.js';
 import { CompassManager } from './modules/CompassManager.js';
 import { CONFIG } from './modules/Config.js';
 import { Utils } from './modules/Utils.js';
-import { WindManager } from './modules/windManager.js';
+import { WindManager } from './modules/WindManager.js';
 
 class DandelionsApp {
     constructor() {
