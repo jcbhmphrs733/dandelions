@@ -20,16 +20,16 @@ export const CONFIG = {
     TILESDOWN: 8,
     IMAGES: {
         SEEDS: [
-            'url(../assets/images/seed1.png)',
-            'url(../assets/images/seed2.png)',
-            'url(../assets/images/seed3.png)',
-            'url(../assets/images/seed4.png)'
+            'url(./assets/images/seed1.png)',
+            'url(./assets/images/seed2.png)',
+            'url(./assets/images/seed3.png)',
+            'url(./assets/images/seed4.png)'
         ],
         FLOWERS: [
-            'url(../assets/images/flower1.png)',
-            'url(../assets/images/flower2.png)',
-            'url(../assets/images/flower3.png)',
-            'url(../assets/images/flower4.png)'
+            'url(./assets/images/flower1.png)',
+            'url(./assets/images/flower2.png)',
+            'url(./assets/images/flower3.png)',
+            'url(./assets/images/flower4.png)'
         ]
     },
     MOUSE_BUTTONS: {
