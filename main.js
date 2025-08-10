@@ -12,6 +12,7 @@ import { CONFIG } from './modules/Config.js';
 import { Utils } from './modules/Utils.js';
 import { WindManager } from './modules/WindManager.js';
 import { GameStateManager } from './modules/GameStateManager.js';
+import { InstructionPanel } from './modules/InstructionPanel.js';
 
 class DandelionsApp {
     constructor() {
@@ -20,6 +21,7 @@ class DandelionsApp {
         this.compassManager = null;
         this.windManager = null;
         this.gameStateManager = null;
+        this.instructionPanel = null;
         this.initialize();
     }
 
@@ -38,6 +40,10 @@ class DandelionsApp {
 
         // Initialize game state manager AFTER compass is created
         this.gameStateManager = new GameStateManager();
+
+        // Initialize and show instruction panel
+        this.instructionPanel = new InstructionPanel();
+        this.instructionPanel.show();
 
         console.log('Dandelions application initialized');
 
