@@ -38,12 +38,12 @@ class DandelionsApp {
         // Initialize wind manager
         this.windManager = new WindManager(this.cellManager);
 
-        // Initialize game state manager AFTER compass is created
-        this.gameStateManager = new GameStateManager();
-
-        // Initialize and show instruction panel
+        // Initialize and show instruction panel FIRST
         this.instructionPanel = new InstructionPanel();
         this.instructionPanel.show();
+
+        // Initialize game state manager AFTER instruction panel is created
+        this.gameStateManager = new GameStateManager(this.cellManager, this.instructionPanel);
 
         console.log('Dandelions application initialized');
 

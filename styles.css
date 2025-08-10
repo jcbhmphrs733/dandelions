@@ -158,8 +158,25 @@ html {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    max-width: 80px;
+    max-width: 100px;
     margin-top: 20px;
+}
+
+/* End game results styles */
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+
+.stat-value {
+    color: #d7ffd7;
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 

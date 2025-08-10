@@ -1,10 +1,12 @@
 // GameStateManager.js - Controls turn-based gameplay
 export class GameStateManager {
-    constructor() {
+    constructor(cellManager = null, instructionPanel = null) {
         this.currentTurn = 'DANDELION'; // 'DANDELION' or 'WIND'
         this.turnsRemaining = 8; // 8 wind directions available
         this.gameActive = true;
         this.dandelionMustPlace = true; // Dandelion must place first
+        this.cellManager = cellManager;
+        this.instructionPanel = instructionPanel;
         
         console.log('Game initialized: Dandelion player must place a flower first');
         this.updateTurnDisplay();
@@ -63,7 +65,26 @@ export class GameStateManager {
         this.gameActive = false;
         this.currentTurn = null;
         console.log('Game Over! All wind directions have been used.');
+        console.log('CellManager available:', !!this.cellManager); // DEBUG
+        console.log('InstructionPanel available:', !!this.instructionPanel); // DEBUG
         this.updateTurnDisplay();
+        
+        // Calculate end game results and show panel
+        if (this.cellManager && this.instructionPanel) {
+            const seedCount = this.cellManager.seedCells.size;
+            const flowerCount = this.cellManager.flowerCells.size;
+            const totalCells = this.cellManager.gridManager.cells.length;
+            
+            console.log(`End game stats: ${seedCount} seeds, ${flowerCount} flowers, ${totalCells} total cells`);
+            
+            // Show end game panel after a short delay for better UX
+            setTimeout(() => {
+                console.log('Showing end game panel...'); // DEBUG
+                this.instructionPanel.showEndGame(seedCount, flowerCount, totalCells);
+            }, 1000);
+        } else {
+            console.log('Cannot show end game panel - missing dependencies'); // DEBUG
+        }
     }
 
     updateTurnDisplay() {
